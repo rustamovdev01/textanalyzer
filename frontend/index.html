@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matn tahlili | Premium tahlil dasturi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Modern color palette */
+      --color-primary-50: #f0f4ff;
+      --color-primary-100: #e0e9fe;
+      --color-primary-200: #c7d7fe;
+      --color-primary-300: #a5b8fc;
+      --color-primary-400: #818cf8;
+      --color-primary-500: #6366f1;
+      --color-primary-600: #4f46e5;
+      --color-primary-700: #4338ca;
+      --color-primary-800: #3730a3;
+      --color-primary-900: #312e81;
+      
+      --color-slate-50: #f8fafc;
+      --color-slate-100: #f1f5f9;
+      --color-slate-200: #e2e8f0;
+      --color-slate-300: #cbd5e1;
+      --color-slate-400: #94a3b8;
+      --color-slate-500: #64748b;
+      --color-slate-600: #475569;
+      --color-slate-700: #334155;
+      --color-slate-800: #1e293b;
+      --color-slate-900: #0f172a;
+      
+      --color-teal-400: #2dd4bf;
+      --color-teal-500: #14b8a6;
+      --color-teal-600: #0d9488;
+      
+      --color-rose-400: #fb7185;
+      --color-rose-500: #f43f5e;
+      --color-rose-600: #e11d48;
+      
+      /* Glassmorphism effects */
+      --glass-bg-light: rgba(255, 255, 255, 0.08);
+      --glass-border-light: rgba(255, 255, 255, 0.2);
+      --glass-shadow-light: 0 4px 30px rgba(0, 0, 0, 0.1);
+      
+      --glass-bg-dark: rgba(15, 23, 42, 0.5);
+      --glass-border-dark: rgba(255, 255, 255, 0.05);
+      --glass-shadow-dark: 0 4px 30px rgba(0, 0, 0, 0.2);
+      
+      /* Light theme */
+      --bg-primary: var(--color-slate-50);
+      --bg-secondary: white;
+      --bg-surface: white;
+      --text-primary: var(--color-slate-900);
+      --text-secondary: var(--color-slate-600);
+      --border: var(--color-slate-200);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+      --shadow-focus: 0 0 0 1px rgba(99, 102, 241, 0.1), 0 0 16px -4px rgba(99, 102, 241, 0.3);
+      
+      /* Dark theme */
+      --dark-bg-primary: var(--color-slate-900);
+      --dark-bg-secondary: var(--color-slate-800);
+      --dark-bg-surface: var(--color-slate-800);
+      --dark-text-primary: var(--color-slate-100);
+      --dark-text-secondary: var(--color-slate-400);
+      --dark-border: var(--color-slate-700);
+      --dark-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+      --dark-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.25), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+      --dark-shadow-focus: 0 0 0 1px rgba(129, 140, 248, 0.1), 0 0 16px -4px rgba(129, 140, 248, 0.3);
+      
+      /* Typography */
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-display: 'Cal Sans', 'Inter', sans-serif;
+      --font-mono: monospace;
+      
+      /* Spacing */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      
+      /* Border radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+      
+      /* Transition */
+      --transition-default: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-lg);
+      line-height: 1.5;
+      transition: var(--transition-slow);
+    }
+
+    body.dark-mode {
+      background: var(--dark-bg-primary);
+      color: var(--dark-text-primary);
+    }
+
+    .container {
+      background: var(--bg-secondary);
+      padding: var(--space-xl);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 800px;
+      box-shadow: var(--shadow);
+      transition: var(--transition-slow);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dark-mode .container {
+      background: var(--dark-bg-secondary);
+      box-shadow: var(--dark-shadow);
+      border-color: var(--dark-border);
+    }
+
+    /* Glassmorphism accent bar */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--color-primary-500), var(--color-teal-500));
+      z-index: 1;
+    }
+
+    .dark-mode .container::before {
+      background: linear-gradient(to bottom, var(--color-primary-400), var(--color-teal-400));
+    }
+
+    /* Neumorphic card effect */
+    .container::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%);
+      pointer-events: none;
+    }
+
+    .dark-mode .container::after {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      text-align: center;
+      margin-bottom: var(--space-xl);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      position: relative;
+      padding-bottom: var(--space-sm);
+      letter-spacing: -0.025em;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--color-primary-500), var(--color-teal-500));
+      border-radius: var(--radius-full);
+      opacity: 0.8;
+    }
+
+    .dark-mode h1::after {
+      background: linear-gradient(to right, var(--color-primary-400), var(--color-teal-400));
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+
+    textarea {
+      width: 100%;
+      padding: var(--space-md);
+      font-size: 1rem;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      resize: vertical;
+      min-height: 200px;
+      transition: var(--transition-default);
+      font-family: inherit;
+      line-height: 1.6;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+
+    .dark-mode textarea {
+      background: var(--dark-bg-surface);
+      color: var(--dark-text-primary);
+      border-color: var(--dark-border);
+      box-shadow: var(--dark-shadow);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-primary-500);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .dark-mode textarea:focus {
+      border-color: var(--color-primary-400);
+      box-shadow: var(--dark-shadow-focus);
+    }
+
+    textarea.invalid {
+      border-color: var(--color-rose-500);
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .char-counter {
+      position: absolute;
+      bottom: var(--space-sm);
+      right: var(--space-sm);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .dark-mode .char-counter {
+      color: var(--dark-text-secondary);
+      background: var(--dark-bg-surface);
+      border-color: var(--dark-border);
+    }
+
+    .button-group {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    button {
+      flex: 1;
+      padding: var(--space-md);
+      background: var(--color-primary-500);
+      border: none;
+      border-radius: var(--radius-lg);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-default);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    button:hover {
+      background: var(--color-primary-600);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    button:active {
+      transform: translateY(0);
+      animation: buttonPress 200ms ease;
+    }
+
+    button:disabled {
+      background: var(--color-slate-400);
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .dark-mode button {
+      background: var(--color-primary-400);
+    }
+
+    .dark-mode button:hover {
+      background: var(--color-primary-500);
+      box-shadow: var(--dark-shadow-hover);
+    }
+
+    .clear-btn {
+      background: var(--color-rose-500);
+    }
+
+    .clear-btn:hover {
+      background: var(--color-rose-600);
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+    }
+
+    .dark-mode .clear-btn {
+      background: var(--color-rose-400);
+    }
+
+    .dark-mode .clear-btn:hover {
+      background: var(--color-rose-500);
+    }
+
+    /* Ripple effect */
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    button:focus:not(:active)::after {
+      animation: ripple 600ms linear;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0);
+        opacity: 0.6;
+      }
+      100% {
+        transform: scale(20);
+        opacity: 0;
+      }
+    }
+
+    @keyframes buttonPress {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: var(--space-sm);
+      right: var(--space-sm);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition-default);
+      z-index: 1;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .copy-btn:hover {
+      background: var(--color-primary-500);
+      color: white;
+      border-color: var(--color-primary-500);
+    }
+
+    .dark-mode .copy-btn {
+      background: var(--dark-bg-surface);
+      color: var(--dark-text-primary);
+      border-color: var(--dark-border);
+    }
+
+    .dark-mode .copy-btn:hover {
+      background: var(--color-primary-400);
+      color: white;
+      border-color: var(--color-primary-400);
+    }
+
+    .output, .error {
+      margin-top: var(--space-lg);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: var(--transition-slow);
+      position: relative;
+      white-space: pre-wrap;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .output.show, .error.show {
+      opacity: 1;
+      transform: translateY(0);
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .output {
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--text-primary);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+    }
+
+    .dark-mode .output {
+      background: rgba(45, 212, 191, 0.1);
+      color: var(--dark-text-primary);
+      border-color: rgba(45, 212, 191, 0.3);
+    }
+
+    .error {
+      background: rgba(244, 63, 94, 0.1);
+      color: var(--text-primary);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .dark-mode .error {
+      background: rgba(244, 63, 94, 0.1);
+      color: var(--dark-text-primary);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .loader {
+      margin: var(--space-xl) auto;
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(99, 102, 241, 0.2);
+      border-top-color: var(--color-primary-500);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    .dark-mode .loader {
+      border-color: rgba(129, 140, 248, 0.2);
+      border-top-color: var(--color-primary-400);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: var(--space-md);
+      right: var(--space-md);
+      width: 44px;
+      height: 44px;
+      background: var(--bg-surface);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: var(--transition-default);
+      z-index: 10;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .dark-mode .theme-toggle {
+      background: var(--dark-bg-surface);
+      border-color: var(--dark-border);
+    }
+
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-primary);
+      transition: var(--transition-default);
+    }
+
+    .dark-mode .theme-toggle svg {
+      stroke: var(--dark-text-primary);
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .status-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--color-primary-500), var(--color-teal-500));
+      z-index: 100;
+    }
+
+    .dark-mode .status-bar {
+      background: linear-gradient(to right, var(--color-primary-400), var(--color-teal-400));
+    }
+
+    /* Floating particles background (optional) */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.15;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: var(--space-md);
+        border-radius: var(--radius-lg);
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-lg);
+      }
+      
+      textarea {
+        min-height: 150px;
+        padding: var(--space-sm);
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+      
+      .theme-toggle {
+        top: var(--space-sm);
+        right: var(--space-sm);
+        width: 36px;
+        height: 36px;
+      }
+      
+      .theme-toggle svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar"></div>
+  <div class="theme-toggle" onclick="toggleTheme()">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+    </svg>
+  </div>
+  <div class="container">
+    <h1>Professional Matn Tahlili</h1>
+    <div class="input-wrapper">
+      <textarea id="textInput" placeholder="Tahlil qilish uchun matn kiriting (maks. 5000 belgi)..." maxlength="5000"></textarea>
+      <span class="char-counter" id="charCounter">0/5000</span>
+    </div>
+    <div class="button-group">
+      <button type="button" onclick="analyzeText()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        Tahlil qilish
+      </button>
+      <button type="button" class="clear-btn" onclick="clearInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"></path>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+        Tozalash
+      </button>
+    </div>
+    <div id="loader" class="loader" aria-busy="true"></div>
+    <div class="output" id="outputText" aria-live="polite"></div>
+    <div class="error" id="errorText" aria-live="assertive"></div>
+  </div>
+
+  <script>
+    function typeText(element, text, speed = 15) {
+      element.textContent = '';
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          element.textContent += text[i];
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const copyBtn = document.querySelector('.copy-btn');
+        copyBtn.textContent = 'Nusxalandi!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Nusxalash';
+        }, 1000);
+      }).catch(() => {
+        alert('Nusxalashda xatolik yuz berdi.');
+      });
+    }
+
+    async function analyzeText() {
+      const input = document.getElementById("textInput").value.trim();
+      const outputDiv = document.getElementById("outputText");
+      const errorDiv = document.getElementById("errorText");
+      const loader = document.getElementById("loader");
+      const buttons = document.querySelectorAll(".button-group button");
+      const charCounter = document.getElementById("charCounter");
+      const textarea = document.getElementById("textInput");
+
+      outputDiv.classList.remove("show");
+      outputDiv.textContent = '';
+      errorDiv.classList.remove("show");
+      errorDiv.textContent = '';
+      textarea.classList.remove("invalid");
+      loader.style.display = 'block';
+      buttons.forEach(btn => {
+        btn.disabled = true;
+      });
+
+      if (!input) {
+        errorDiv.textContent = "Iltimos, matn kiriting.";
+        errorDiv.classList.add("show");
+        textarea.classList.add("invalid");
+        loader.style.display = 'none';
+        buttons.forEach(btn => {
+          btn.disabled = false;
+        });
+        return;
+      }
+
+      try {
+        // Simulate API call with timeout
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Mock analysis results
+        const wordCount = input.split(/\s+/).filter(word => word.length > 0).length;
+        const charCount = input.length;
+        const sentenceCount = input.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+        
+        const result = `📊 Tahlil natijalari:
+        
+• So'zlar soni: ${wordCount}
+• Belgilar soni: ${charCount}
+• Gapalar soni: ${sentenceCount}
+• O'rtacha so'z uzunligi: ${Math.round(charCount / wordCount * 10) / 10 || 0} belgi
+
+🔍 Kalit so'zlar:
+${extractKeywords(input).join(', ')}
+
+📈 Matn murakkabligi: ${analyzeComplexity(input)}`;
+
+        outputDiv.innerHTML = `<span>${result}</span><button class="copy-btn" onclick="copyToClipboard(\`${result.replace(/`/g, '\\`')}\`)" aria-label="Tahlil natijasini nusxalash">Nusxalash</button>`;
+        outputDiv.classList.add("show");
+        typeText(outputDiv.querySelector('span'), result);
+
+      } catch (error) {
+        errorDiv.textContent = error.message.includes('fetch')
+          ? 'Server bilan bog‘lanib bo‘lmadi. Iltimos, keyinroq urinib ko‘ring.'
+          : 'Xatolik: ' + error.message;
+        errorDiv.classList.add("show");
+        textarea.classList.add("invalid");
+      } finally {
+        loader.style.display = 'none';
+        buttons.forEach(btn => {
+          btn.disabled = false;
+        });
+      }
+    }
+
+    // Helper functions for mock analysis
+    function extractKeywords(text) {
+      const words = text.toLowerCase().split(/\s+/);
+      const freq = {};
+      words.forEach(word => {
+        if (word.length > 3) {
+          freq[word] = (freq[word] || 0) + 1;
+        }
+      });
+      return Object.entries(freq)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([word]) => word);
+    }
+
+    function analyzeComplexity(text) {
+      const avgWordLength = text.split(/\s+/).reduce((sum, word) => sum + word.length, 0) / text.split(/\s+/).length;
+      const sentenceCount = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+      const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+      
+      const complexity = (avgWordLength * 0.3) + (wordCount / sentenceCount * 0.7);
+      
+      if (complexity < 10) return "Oson";
+      if (complexity < 20) return "O‘rtacha";
+      return "Murakkab";
+    }
+
+    // Clear Input
+    function clearInput() {
+      const textarea = document.getElementById("textInput");
+      const outputDiv = document.getElementById("outputText");
+      const errorDiv = document.getElementById("errorText");
+      textarea.classList.add('shake');
+      textarea.value = '';
+      outputDiv.classList.remove("show");
+      outputDiv.textContent = '';
+      errorDiv.classList.remove("show");
+      errorDiv.textContent = '';
+      textarea.classList.remove("invalid");
+      updateCharCounter();
+      textarea.focus();
+      setTimeout(() => textarea.classList.remove('shake'), 500);
+    }
+
+    function updateCharCounter() {
+      const textarea = document.getElementById("textInput");
+      const charCounter = document.getElementById("charCounter");
+      charCounter.textContent = `${textarea.value.length}/5000`;
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+
+    document.getElementById('textInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        analyzeText();
+      }
+    });
+
+    document.getElementById("textInput").addEventListener("input", updateCharCounter);
+    updateCharCounter();
+  </script>
+</body>
+</html>
