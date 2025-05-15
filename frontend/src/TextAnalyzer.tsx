@@ -164,33 +164,56 @@ const TextAnalyzer: React.FC = () => {
   const determineSentiment = (text: string): Sentiment => {
     const positiveWords = ['yaxshi', 'zo‘r', 'mamnun', 'baxtli', 'muvaffaqiyat', 'xursand', 'olijon', 'quvonch', 'sog‘lom', 'sevinch', 'muhabbat', 'ilhom', 'zavq', 'o‘ynoqi', 'fayzli', 'mehr', 'hurmat', 'ezgu', 'rahmat', 'yengil', 'yuksak', 'juda', 'a’lo', 'chiroyli', 'go‘zal', 'muhim', 'foydali', 'qiziqarli', 'hayratlanarli', 'g‘urur', 'ustun', 'kuchli', 'dostlik', 'tinchlik', 'rivojlanish', 'yutuq', 'baho'];
     const negativeWords = ['yomon', 'qiyin', 'xafa', 'muammo', 'xato', 'qattiq', 'o‘lik', 'kasal', 'g‘amgin', 'qayg‘u', 'afsus', 'jahl', 'xavotir', 'tashvish', 'og‘ir', 'achchiq', 'bezovta', 'asabiy', 'noqulay', 'dahshat', 'qo‘rqinch', 'xavfli', 'kulfat', 'zulum', 'baxtsiz', 'noto‘g‘ri', 'qaltis', 'havf', 'kuchsiz', 'yolg‘iz', 'mag‘lubiyat', 'zarar', 'qo‘rquv', 'qahr', 'dushmanlik', 'uzr'];
-    const keywords = extractKeywords(text);
-    const words = text.toLowerCase().split(/\s+/);
+    const neutralWords = ['masala', 'hodisa', 'fakt', 'ma’lumot', 'raqam', 'jarayon', 'natija', 'sabab', 'oqibat', 'tushuncha'];
+    const words = text.toLowerCase().split(/\s+/).filter(word => word.length > 0);
     const posCount = words.filter(word => positiveWords.includes(word)).length;
     const negCount = words.filter(word => negativeWords.includes(word)).length;
+    const neutCount = words.filter(word => neutralWords.includes(word)).length;
+    const keywords = extractKeywords(text);
 
     let mainTopic = keywords.length > 0 ? keywords.slice(0, 2).join(' va ') : "noma'lum mavzu";
     let tone = "";
-    if (posCount > negCount) {
-      tone = posCount > 2 ? "ijobiy va ilhomlantiruvchi ohangda, quvonchli va hayratlanarli kayfiyat bilan" : "ijobiy ohangda, engil va qoniqarli kayfiyat bilan";
-    } else if (negCount > posCount) {
-      tone = negCount > 2 ? "salbiy va tashvishli ohangda, qayg‘uli va og‘ir kayfiyat bilan" : "salbiy ohangda, noqulay kayfiyat bilan";
-    } else {
-      tone = "neytral ohangda, hissiyotsiz yoki muvozanatli kayfiyat bilan";
-    }
-
+    let emotionalExpression = "";
     let contentPurpose = "";
-    if (keywords.includes('tarix') || keywords.includes('hayot')) {
-      contentPurpose = "tarixiy ma’lumot beradi";
-    } else if (keywords.includes('muammo') || keywords.includes('xavotir')) {
-      contentPurpose = "muammolar haqida ogohlantiradi";
-    } else if (keywords.includes('yutuq') || keywords.includes('muvaffaqiyat')) {
-      contentPurpose = "yutuqlarni ulug‘laydi";
+    let intendedMessage = "";
+
+    // Hissiyotni aniqlash
+    if (posCount > negCount && posCount > neutCount) {
+      tone = posCount > 3 ? "qattiq ijobiy va ilhomlantiruvchi ohangda" : "engil ijobiy ohangda";
+      emotionalExpression = posCount > 3 ? "quvonch, hayrat va g‘urur kabi kuchli ijobiy his-tuyg‘ular bilan" : "mamnunlik va tinchlik kabi yumshoq ijobiy his-tuyg‘ular bilan";
+      if (keywords.some(word => ['yutuq', 'muvaffaqiyat', 'rivojlanish'].includes(word.toLowerCase()))) {
+        contentPurpose = "muvaffaqiyatlarni ulug‘laydi va odamlarni rag‘batlantirishga qaratilgan.";
+        intendedMessage = "Bu matn o‘quvchilarga o‘z maqsadlariga erishish uchun kuch-quvvat va ishonch bag‘ishlamoqchi.";
+      } else if (keywords.some(word => ['sevinch', 'muhabbat', 'dostlik'].includes(word.toLowerCase()))) {
+        contentPurpose = "do‘stlik va mehr-oqibatni targ‘ib qilishga qaratilgan.";
+        intendedMessage = "Matn o‘quvchilarga insoniy munosabatlarni qadrlash va sevgi tuyg‘ularini rivojlantirishni targ‘ib qilmoqchi.";
+      } else {
+        contentPurpose = "umumiy ijobiy ma’lumot va hayajonli voqealarni taqdim etishga qaratilgan.";
+        intendedMessage = "Matn o‘quvchilarga hayotdagi yorqin jihatlarni ko‘rishga undaydi.";
+      }
+    } else if (negCount > posCount && negCount > neutCount) {
+      tone = negCount > 3 ? "chuqur salbiy va tashvishli ohangda" : "oddiy salbiy ohangda";
+      emotionalExpression = negCount > 3 ? "qayg‘u, xavotir va asabiylik kabi og‘ir his-tuyg‘ular bilan" : "afsus va noqulaylik kabi yumshoq salbiy his-tuyg‘ular bilan";
+      if (keywords.some(word => ['muammo', 'xavf', 'zarar'].includes(word.toLowerCase()))) {
+        contentPurpose = "muammolarni ko‘rsatish va ogohlantirishga qaratilgan.";
+        intendedMessage = "Matn o‘quvchilarni muayyan xavf-xatarlar yoki muammolarga e’tibor qaratishga chorlaydi.";
+      } else if (keywords.some(word => ['qayg‘u', 'afsus', 'yolg‘iz'].includes(word.toLowerCase()))) {
+        contentPurpose = "his-tuyg‘ularga ta’sir qilish va qayg‘uni ifodalashga qaratilgan.";
+        intendedMessage = "Matn o‘quvchilarga ichki his-tuyg‘ularini anglash va ularga qarshi kurashishga yordam bermoqchi.";
+      } else {
+        contentPurpose = "umumiy salbiy holatlarni bayon qilishga qaratilgan.";
+        intendedMessage = "Matn o‘quvchilarga hayotdagi qiyinchiliklarni tan olishga undaydi.";
+      }
     } else {
-      contentPurpose = "umumiy ma’lumot taqdim etadi";
+      tone = "neytral va norasmiy ohangda";
+      emotionalExpression = "hech qanday aniq hissiyotni ifodalamaydi, faqat faktlar va ma’lumotlarga asoslanadi";
+      contentPurpose = "ob’ektiv ma’lumot taqdim etishga qaratilgan.";
+      intendedMessage = "Matn o‘quvchilarga faqat haqiqatlarni yetkazishni maqsad qilgan bo‘lib, hissiyotni boshqarishdan ko‘ra tushuncha berishga harakat qiladi.";
     }
 
-    return { description: `Matn ${mainTopic} haqida, ${tone}, ${contentPurpose}.` };
+    return {
+      description: `Matn asosan ${mainTopic} mavzusiga bag‘ishlangan bo‘lib, ${tone} yozilgan. Unda ${emotionalExpression} ifodalangan. Ushbu matnning asosiy maqsadi ${contentPurpose} bo‘lib, u ${intendedMessage}.`,
+    };
   };
 
   const clearInput = () => {
@@ -214,21 +237,12 @@ const TextAnalyzer: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        analyzeText();
-      }
-    };
-    const textarea = document.getElementById('textInput');
-    if (textarea) {
-      textarea.addEventListener('keydown', handleKeyDown);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      analyzeText();
     }
-    return () => {
-      if (textarea) textarea.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
+  };
 
   return (
     <>
@@ -248,6 +262,7 @@ const TextAnalyzer: React.FC = () => {
             onChange={(e) => {
               setText(e.target.value);
             }}
+            onKeyDown={handleKeyDown} // Enter bilan ishlaydigan hodisani qo‘shdik
             placeholder="Matn kiriting (maks. 5000 belgi)..."
             maxLength={5000}
           />
@@ -281,18 +296,18 @@ const TextAnalyzer: React.FC = () => {
             <div className="result-card">
               <h3>Statistika</h3>
               <ul>
-                <li>So‘zlar: {stats.wordCount}</li>
-                <li>Belgilar: {stats.charCount}</li>
-                <li>Gaplar: {stats.sentenceCount}</li>
+                <li>So‘zlar soni: {stats.wordCount}</li>
+                <li>Belgilar soni: {stats.charCount}</li>
+                <li>Gaplar soni: {stats.sentenceCount}</li>
               </ul>
             </div>
             <div className="result-card">
               <h3>Kalit So‘zlar</h3>
-              <p>{keywords.length > 0 ? keywords.join(', ') : "Kalit so‘zlar topilmadi"}</p>
+              <p>{keywords.length > 0 ? keywords.join(', ') : "Matnda hech qanday muhim kalit so‘z topilmadi"}</p>
             </div>
             <div className="result-card">
               <h3>O‘qilish Darajasi</h3>
-              <p>{readability}</p>
+              <p>{readability === "Juda Oson" ? "Bu matn juda oson tushunarli, boshlang‘ich darajadagi o‘quvchilar uchun ham qulay." : readability === "Oson" ? "Matn oson darajada, o‘rta darajadagi o‘quvchilar uchun mos." : readability === "O‘rtacha" ? "Matn o‘rtacha darajada, biroz diqqat talab qiladi." : "Matn qiyin, chuqur tushunish uchun katta sa’y-harakat kerak."}</p>
             </div>
             <div className="result-card">
               <h3>Matnning Mazmuni va Hissiyoti</h3>
